@@ -1,7 +1,19 @@
 import { NavLink } from "react-router-dom";
 import classes from "./MainNavigation.module.css";
-
+import { useContext } from "react";
+import AuthContext from "../store/auth-context";
+import { useNavigate } from "react-router-dom";
 const MainNavigation = () => {
+  const authCtx=useContext(AuthContext);
+  const navigate = useNavigate(); 
+  const isLoggedIn=authCtx.isLoggedIn;
+  const logoutHandler=()=>{
+    authCtx.logout();
+    console.log(authCtx.token);
+    alert("logout successfull");
+    navigate("/");
+  }
+
   return (
     <header className={classes.header}>
       <NavLink to="/" className={classes.logo}>
@@ -10,7 +22,8 @@ const MainNavigation = () => {
 
       <nav>
         <ul>
-          <li>
+          {!isLoggedIn && 
+          (<li>
             <NavLink
               to="/auth"
               className={({ isActive }) =>
@@ -19,9 +32,9 @@ const MainNavigation = () => {
             >
               Login
             </NavLink>
-          </li>
-
-          <li>
+          </li>)
+          }
+          {isLoggedIn && (<li>
             <NavLink
               to="/profile"
               className={({ isActive }) =>
@@ -30,11 +43,11 @@ const MainNavigation = () => {
             >
               Profile
             </NavLink>
-          </li>
+          </li>)}
 
-          <li>
-            <button>Logout</button>
-          </li>
+          {isLoggedIn && (<li>
+            <button onClick={logoutHandler}>Logout</button>
+          </li>)}
         </ul>
       </nav>
     </header>
