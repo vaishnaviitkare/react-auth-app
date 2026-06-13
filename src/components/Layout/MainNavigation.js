@@ -9,7 +9,6 @@ const MainNavigation = () => {
   const isLoggedIn=authCtx.isLoggedIn;
   const logoutHandler=()=>{
     authCtx.logout();
-    console.log(authCtx.token);
     alert("logout successfull");
     navigate("auth");
   }
