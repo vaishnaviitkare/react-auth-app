@@ -1,17 +1,15 @@
 import { useState, useRef, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-
 import classes from "./AuthForm.module.css";
 import AuthContext from "../store/auth-context";
-
+import { useNavigate } from "react-router-dom";
 const AuthForm = () => {
+  const navigate=useNavigate();
   const authCtx=useContext(AuthContext);
   const [isLogin, setIsLogin] = useState(true);
   const[isLoading,setIsLoading]=useState(false);
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
 
-  //const navigate = useNavigate(); 
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
@@ -56,6 +54,7 @@ const AuthForm = () => {
      }
       }).then(data=>{
         authCtx.login(data.idToken);
+        navigate('/');
       })
         .catch(err=>{
           alert(err.message);

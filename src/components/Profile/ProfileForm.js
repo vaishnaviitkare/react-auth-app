@@ -1,11 +1,35 @@
+import { useContext, useRef } from 'react';
 import classes from './ProfileForm.module.css';
-
+import AuthContext from '../store/auth-context';
+import { useNavigate } from "react-router-dom";
 const ProfileForm = () => {
+  const navigate=useNavigate();
+  const authCtx=useContext(AuthContext);
+  const newPasswordRef=useRef();
+  const passwordChangeHandler=(event)=>{
+    event.preventDefault();
+    const enteredNewPassword=newPasswordRef.current.value;
+    fetch('https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyC7HwmxiccjOlZptCzVHvVlr5bxS0SAqOE',
+      {method:'POST',
+        body:JSON.stringify({
+         idToken:authCtx.token,
+         password:enteredNewPassword,
+         returnSecureToken:false,
+        }
+        ),
+        headers:{
+          'Content-Type':'application/json'
+        }
+      }
+    ).then((res)=>{
+     navigate('/');
+    })
+  }
   return (
-    <form className={classes.form}>
+    <form className={classes.form} onSubmit={passwordChangeHandler}>
       <div className={classes.control}>
         <label htmlFor='new-password'>New Password</label>
-        <input type='password' id='new-password' />
+        <input type='password' id='new-password' minLength="7" ref={newPasswordRef}/>
       </div>
       <div className={classes.action}>
         <button>Change Password</button>

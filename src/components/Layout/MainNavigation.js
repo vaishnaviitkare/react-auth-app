@@ -11,7 +11,7 @@ const MainNavigation = () => {
     authCtx.logout();
     console.log(authCtx.token);
     alert("logout successfull");
-    navigate("/");
+    navigate("auth");
   }
 
   return (
